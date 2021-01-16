@@ -16,9 +16,9 @@ const GET_TODOS = gql`
 //delete todos
 
 function App() {
-  const { data, loading } = useQuery(GET_TODOS);
-  if (loading) return <div>Loading</div>;
-
+  const { data, loading, error } = useQuery(GET_TODOS);
+  if (loading) return <div>Loading todos</div>;
+  if (error) return <div>Error fetching todos</div>;
   return (
     <div>
       {data.todos.map((todo) => (
