@@ -43,7 +43,9 @@ function App() {
   const [todoText, setTodoText] = React.useState("");
   const { data, loading, error } = useQuery(GET_TODOS);
   const [toggleTodo] = useMutation(TOGGLE_TODOS); // this returns a function we will destructure from an array
-  const [addToDo] = useMutation(ADD_TODO);
+  const [addToDo] = useMutation(ADD_TODO, {
+    onCompleted: () => setTodoText(""), // here we can also pass in a second argument that tells it what to do once the mutation has been completed.
+  });
   async function handleToggleTodo(todo) {
     const data = await toggleTodo({
       variables: { id: todo.id, done: !todo.done },
@@ -54,9 +56,11 @@ function App() {
   async function handleAddToDo(event) {
     event.preventDefault();
     if (!todoText.trim()) return;
-    const data = await addToDo({ variables: { text: todoText } });
+    const data = await addToDo({
+      variables: { text: todoText },
+      refetchQueries: [{ query: GET_TODOS }], //in addition to passing variables in a mutation we can also tell it what to do after executing the mutation in this case we want to refresh the queries because by default when the client is created it uses caching to store all the data and it can only handle realtime updates to the data that it has cached but cannot handle real time adding of a new data so we have to tell it to refresh after adding so that it shows realtime in the dom. Although this has some performance issues because we have to make a new http request
+    });
     console.log("added todo", data);
-    setTodoText("");
   }
 
   if (loading) return <div>Loading todos</div>;
