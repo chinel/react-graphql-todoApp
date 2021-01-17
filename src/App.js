@@ -21,12 +21,21 @@ function App() {
   if (error) return <div>Error fetching todos</div>;
   return (
     <div>
-      {data.todos.map((todo) => (
-        <p key={todo.id}>
-          <span>{todo.text}</span>
-          <button>&times;</button>
-        </p>
-      ))}
+      <h1>GraphQL Checklist</h1>
+      {/* Todo Form */}
+      <form action="">
+        <input type="text" placeholder="Write your todo" />
+        <button type="submit">Create</button>
+      </form>
+      {/* Todo List*/}
+      <div>
+        {data.todos.map((todo) => (
+          <p key={todo.id}>
+            <span>{todo.text}</span>
+            <button>&times;</button>
+          </p>
+        ))}
+      </div>
     </div>
   );
 }
