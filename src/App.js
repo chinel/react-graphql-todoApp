@@ -22,6 +22,18 @@ const TOGGLE_TODOS = gql`
     }
   }
 `;
+
+const ADD_TODO = gql`
+  mutation addTodo($text: String) {
+    insert_todos(objects: { text: $text }) {
+      returning {
+        done
+        id
+        text
+      }
+    }
+  }
+`;
 //list todos
 //add todo
 //toggle todos
