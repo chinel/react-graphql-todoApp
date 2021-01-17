@@ -40,14 +40,23 @@ const ADD_TODO = gql`
 //delete todos
 
 function App() {
+  const [todoText, setTodoText] = React.useState("");
   const { data, loading, error } = useQuery(GET_TODOS);
   const [toggleTodo] = useMutation(TOGGLE_TODOS); // this returns a function we will destructure from an array
-
+  const [addToDo] = useMutation(ADD_TODO);
   async function handleToggleTodo(todo) {
     const data = await toggleTodo({
       variables: { id: todo.id, done: !todo.done },
     });
     console.log(data);
+  }
+
+  async function handleAddToDo(event) {
+    event.preventDefault();
+    if (!todoText.trim()) return;
+    const data = await addToDo({ variables: { text: todoText } });
+    console.log("added todo", data);
+    setTodoText("");
   }
 
   if (loading) return <div>Loading todos</div>;
@@ -61,11 +70,13 @@ function App() {
         </span>
       </h1>
       {/* Todo Form */}
-      <form className="mb3">
+      <form className="mb3" onSubmit={handleAddToDo}>
         <input
           className="pa2 f4 b--dashed"
           type="text"
           placeholder="Write your todo"
+          onChange={(event) => setTodoText(event.target.value)}
+          value={todoText}
         />
         <button className="pa2 f4 bg-green" type="submit">
           Create
