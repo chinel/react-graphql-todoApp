@@ -81,7 +81,17 @@ function App() {
     const isConfirmed = window.confirm("Do you want to delete this todo");
 
     if (isConfirmed) {
-      const data = await deleteToDo(id);
+      const data = await deleteToDo({
+        variables: {
+          id: id,
+        },
+        //here what we are trying to do is that we are trying to update the data stored in the cache by filtering for data not equal to the id passed and updatin the cache with the newData instead of using refreshqueries to make a new http api call which is not performant
+        update: (cache) => {
+          const prevData = cache.readQuery({ query: GET_TODOS });
+          const newToDos = prevData.todos.filter((todo) => todo.id !== id);
+          cache.writeQuery({ query: GET_TODOS, data: { todos: newToDos } });
+        },
+      });
       console.log("deleted todo", data);
     }
   }
