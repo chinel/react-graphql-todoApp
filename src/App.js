@@ -34,6 +34,18 @@ const ADD_TODO = gql`
     }
   }
 `;
+
+const DELETE_TODO = gql`
+  mutation deleteToDo($id: uuid!) {
+    delete_todos(where: { id: { _eq: $id } }) {
+      returning {
+        done
+        id
+        text
+      }
+    }
+  }
+`;
 //list todos
 //add todo
 //toggle todos
