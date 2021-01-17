@@ -58,6 +58,8 @@ function App() {
   const [addToDo] = useMutation(ADD_TODO, {
     onCompleted: () => setTodoText(""), // here we can also pass in a second argument that tells it what to do once the mutation has been completed.
   });
+  const [deleteToDo] = useMutation(DELETE_TODO);
+
   async function handleToggleTodo(todo) {
     const data = await toggleTodo({
       variables: { id: todo.id, done: !todo.done },
@@ -73,6 +75,15 @@ function App() {
       refetchQueries: [{ query: GET_TODOS }], //in addition to passing variables in a mutation we can also tell it what to do after executing the mutation in this case we want to refresh the queries because by default when the client is created it uses caching to store all the data and it can only handle realtime updates to the data that it has cached but cannot handle real time adding of a new data so we have to tell it to refresh after adding so that it shows realtime in the dom. Although this has some performance issues because we have to make a new http request
     });
     console.log("added todo", data);
+  }
+
+  async function handleDeleteToDo({ id }) {
+    const isConfirmed = window.confirm("Do you want to delete this todo");
+
+    if (isConfirmed) {
+      const data = await deleteToDo(id);
+      console.log("deleted todo", data);
+    }
   }
 
   if (loading) return <div>Loading todos</div>;
@@ -113,7 +124,10 @@ function App() {
             <span className={`pointer list pa1 f3 ${todo.done && "strike"}`}>
               {todo.text}
             </span>
-            <button className="bg-transparent bn f4">
+            <button
+              className="bg-transparent bn f4"
+              onClick={() => handleDeleteToDo(todo)}
+            >
               <span className="red">&times;</span>
             </button>
           </p>
