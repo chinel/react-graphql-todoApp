@@ -2,7 +2,7 @@
 
 ### [Live Site](https://happy-bhabha-676a03.netlify.app)
 
-![React Todo App](https://i.imgur.com/2bIfY43.png)
+![React Todo App](https://i.imgur.com/Wsk8Tva.png)
 
 ## Introduction
 
