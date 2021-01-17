@@ -6,7 +6,11 @@
 
 ## Introduction
 
-This application is a simple Todo App built using react js and Hasura as the serverless Backend providing all the GraphQl Api's needed
+This application is a simple Todo App built using react js and Hasura as the serverless Backend providing all the GraphQl Api's needed.
+
+- You can add a todo list
+- You can double click a todo to mark it as finished
+- You can as well delete a todo
 
 ### Technologies used
 
