@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, gql, useMutation } from "@apollo/client";
 
 const GET_TODOS = gql`
   query getTodos {
@@ -10,6 +10,18 @@ const GET_TODOS = gql`
     }
   }
 `;
+
+const TOGGLE_TODOS = gql`
+  mutation toggleTodo($id: uuid!, $done: Boolean!) {
+    update_todos(where: { id: { _eq: $id } }, _set: { done: $done }) {
+      returning {
+        done
+        id
+        text
+      }
+    }
+  }
+`;
 //list todos
 //add todo
 //toggle todos
@@ -17,6 +29,8 @@ const GET_TODOS = gql`
 
 function App() {
   const { data, loading, error } = useQuery(GET_TODOS);
+  const [toggleTodo] = useMutation(TOGGLE_TODOS); // this returns a function we will destructure from an array
+
   if (loading) return <div>Loading todos</div>;
   if (error) return <div>Error fetching todos</div>;
   return (
